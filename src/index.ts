@@ -84,7 +84,7 @@ function sayHello():void{//関数でundefinedを返すことは,基本許さな�
     return;
 };
 console.log(sayHello());//undefinedが返ってくる
-let tmp:undefined = null;
+let tmp:undefined;
 
 
 // const doubleNum = number => {
@@ -122,7 +122,23 @@ const triple = tripleNum(30, cb => {
 console.log(triple);//引数＊3＊3
 
 type hard = 'Kata'|'Futu'|'Yawa';
-const order = function orderRamen(hard:hard):void{
-    console.log(`硬さは${hard}です`);
-};
-order('Kata');
+// const order = function orderRamen(hard:hard):void{
+//     console.log(`硬さは${hard}です`);
+// };
+const order:(hard:hard) => void = hard => console.log(`硬さは${hard}です`);
+order('Yawa');
+
+let unknownInput : unknown;
+let anyInput : any;
+let text : string;
+anyInput = 'OK';
+unknownInput = 20;
+unknownInput = true;
+text = anyInput;
+if (typeof unknownInput === 'string'){
+    text = unknownInput;
+}
+function error(message:string):never{
+    throw new Error(message);
+}
+console.log(error('ERRRRRRROR!'));
