@@ -7,9 +7,26 @@ class Person {
         this.age = age;
         // this.age = initAge;
     }
+    static isAdult(age) {
+        if (age > 17)
+            return true;
+        return false;
+    }
     ;
-    incrementAge() {
-        this.age++;
+    static incrementAge() {
+        // this.age++;
+        if ('age' in Person) {
+            console.log(true);
+            // if (Person.isAdult() == true){
+            console.log('You can join election!');
+            // }
+            // else{
+            console.log('You still cannot join election!');
+            // }
+        }
+        else {
+            console.log('Oh NO');
+        }
         // this.name = 'HEEEEE';
     }
     ;
@@ -17,23 +34,28 @@ class Person {
         console.log(`Hello, My name is ${this.name}, age is ${this.age}`);
     }
 }
+Person.species = 'Homo sapiens';
 ;
-const quill = new Person('Quill', 56);
-quill.greeting();
-let person2 = new Person('NNNNAME', 34);
-person2.greeting();
-const anotherQuill = {
-    name: 'Second',
-    // age:80,
-    greeting: quill.greeting,
-    incrementAge: quill.incrementAge,
-    // anotherGreeting:quill.greeting,//thisがどこに依存しているかTSは理解できないので、メソッド元にthisの中身を明示
-    // greeting(){
-    //     console.log(`Hello, My name is ${this.name}` );
-    // }
-};
-const someone = new Person('SomeOne', 33);
-const getName = console.log(someone);
+console.log(Person.isAdult(15));
+const judgeElection = Person.isAdult(17);
+// const quill = new Person('Quill',56);
+// // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Person.incrementAge();
+// quill.greeting();
+// let person2 : Person = new Person('NNNNAME',34);
+// person2.greeting();
+// const anotherQuill =  {
+//     name:'Second',
+//     // age:80,
+//     greeting:quill.greeting,
+//     incrementAge:quill,
+//     // anotherGreeting:quill.greeting,//thisがどこに依存しているかTSは理解できないので、メソッド元にthisの中身を明示
+//     // greeting(){
+//     //     console.log(`Hello, My name is ${this.name}` );
+//     // }
+// }
+// const someone:Person = new Person('SomeOne',33);
+// const getName = console.log(someone);
 // anotherQuill.greeting();
 // class Rintaro{
 //     constructor(private readonly id:number | string, readonly name:string, ){
@@ -58,6 +80,10 @@ class Teacher extends Person {
         super(name, age);
         this._subject = _subject;
     }
+    explainJob() {
+        console.log(`I am a teacher and teach ${this._subject}`);
+        new Teacher('Yassun', 32, 'Music');
+    }
     get subject() {
         if (!this._subject) {
             throw new Error('0 Subject setted');
@@ -65,6 +91,9 @@ class Teacher extends Person {
         return this._subject;
     }
     set subject(gettedSubject) {
+        if (!gettedSubject) {
+            gettedSubject = this._subject;
+        }
         this._subject = gettedSubject;
     }
     greeting() {
@@ -73,9 +102,17 @@ class Teacher extends Person {
     greeting2() {
         super.greeting();
     }
+    static getInstance() {
+        if (Teacher.instance)
+            return Teacher.instance;
+        Teacher.instance = new Teacher('Yassun', 32, 'Music');
+        return Teacher.instance;
+    }
 }
-const teacher = new Teacher('Yassun', 32, 'Music');
-teacher.subject;
-teacher.subject = 'Japanese';
-teacher.greeting();
+const teacher = Teacher.getInstance();
+const teacher2 = Teacher.getInstance();
+console.log(teacher, teacher2);
+// teacher.subject;
+// teacher.subject = 'Japanese';
+// teacher.greeting();
 // teacher.greeting2();

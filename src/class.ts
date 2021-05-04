@@ -1,35 +1,56 @@
-class Person {
+abstract class Person {
+    static species = 'Homo sapiens';
+    static isAdult(age:number){
+        if(age > 17)return true;
+        return false;
+    }
     // name:string;//フィールドはJSにはコンパイルされない
     // private age: number;
     constructor(protected readonly name:string,public age:number){
         // this.age = initAge;
     };
-    incrementAge(){
-        this.age++;
+    static incrementAge(){
+        // this.age++;
+        if ('age'in Person){
+            console.log(true);
+            // if (Person.isAdult() == true){
+                console.log('You can join election!');
+            // }
+            // else{
+                console.log('You still cannot join election!');
+            // }
+
+        }else{
+            console.log('Oh NO');
+        }
         // this.name = 'HEEEEE';
     };
     greeting(this:Person){
         console.log(`Hello, My name is ${this.name}, age is ${this.age}` );
     }
+    abstract explainJob():void
 };
+console.log(Person.isAdult(15));
+const judgeElection = Person.isAdult(17);
+// const quill = new Person('Quill',56);
+// // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Person.incrementAge();
+// quill.greeting();
 
-const quill = new Person('Quill',56);
-quill.greeting();
-
-let person2 : Person = new Person('NNNNAME',34);
-person2.greeting();
-const anotherQuill =  {
-    name:'Second',
-    // age:80,
-    greeting:quill.greeting,
-    incrementAge:quill.incrementAge,
-    // anotherGreeting:quill.greeting,//thisがどこに依存しているかTSは理解できないので、メソッド元にthisの中身を明示
-    // greeting(){
-    //     console.log(`Hello, My name is ${this.name}` );
-    // }
-}
-const someone:Person = new Person('SomeOne',33);
-const getName = console.log(someone);
+// let person2 : Person = new Person('NNNNAME',34);
+// person2.greeting();
+// const anotherQuill =  {
+//     name:'Second',
+//     // age:80,
+//     greeting:quill.greeting,
+//     incrementAge:quill,
+//     // anotherGreeting:quill.greeting,//thisがどこに依存しているかTSは理解できないので、メソッド元にthisの中身を明示
+//     // greeting(){
+//     //     console.log(`Hello, My name is ${this.name}` );
+//     // }
+// }
+// const someone:Person = new Person('SomeOne',33);
+// const getName = console.log(someone);
 
 // anotherQuill.greeting();
 // class Rintaro{
@@ -53,16 +74,24 @@ const getName = console.log(someone);
 // console.log(getRintaro.getRintaroProfile());
 
 class Teacher extends Person{
-    get subject(){
+    private static instance:Teacher;
+    explainJob(){
+        console.log(`I am a teacher and teach ${this._subject}`);
+        new Teacher('Yassun',32, 'Music')
+    }
+    get subject():string{
         if (!this._subject){
             throw new Error('0 Subject setted');
         }
         return this._subject;
     }
     set subject(gettedSubject:string){
+        if (!gettedSubject){
+            gettedSubject = this._subject
+        }
         this._subject = gettedSubject;
     }
-    constructor(name:string, age:number, private _subject:string){
+    private constructor(name:string, age:number, private _subject:string){
         super(name,age);
     }
     greeting(this:Teacher){
@@ -71,10 +100,17 @@ class Teacher extends Person{
     greeting2(){
         super.greeting();
     }
+    static getInstance(){
+        if (Teacher.instance) return Teacher.instance;
+        Teacher.instance = new Teacher('Yassun',32, 'Music');
+        return Teacher.instance;
+    }
 }
-const teacher = new Teacher('Yassun',32, 'Music');
-teacher.subject;
-teacher.subject = 'Japanese';
+const teacher = Teacher.getInstance();
+const teacher2 = Teacher.getInstance();
+console.log(teacher, teacher2);
+// teacher.subject;
+// teacher.subject = 'Japanese';
 
-teacher.greeting();
+// teacher.greeting();
 // teacher.greeting2();
